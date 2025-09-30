@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_sales
+    description: ""
+    columns:
+      - name: movie_id
+        data_type: varchar
+        description: ""
+
+      - name: transaction_month
+        data_type: date
+        description: ""
+
+      - name: location_id
+        data_type: varchar
+        description: ""
+
+      - name: total_tickets
+        data_type: number
+        description: ""
+
+      - name: total_revenue
+        data_type: number
+        description: ""
