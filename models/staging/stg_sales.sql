@@ -1,7 +1,7 @@
 (select 
     movie_id,
     date_trunc('month',transaction_date) as transaction_month,
-    'nj_001' as location_id,
+    'NJ_001' as location_id,
     sum(ticket_amount) as total_tickets,
     sum(transaction_total) as total_revenue
 from {{ source('public', 'nj_001') }}
@@ -11,7 +11,7 @@ union all
 (select 
     movie_id,
     date_trunc('month',date) as transaction_month,
-    'nj_002' as location_id,
+    'NJ_002' as location_id,
     sum(ticket_amount) as total_tickets,
     sum(total_earned) as total_revenue
 from {{ source('public', 'nj_002') }}
@@ -21,7 +21,7 @@ union all
 (select 
     details as movie_id,
     date_trunc('month', transaction_date) as transaction_month,
-    'nj_003' as location_id,
+    'NJ_003' as location_id,
     sum(amount) as total_tickets,
     sum(total_value) as total_revenue
 from {{ source('public', 'nj_003') }}
