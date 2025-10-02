@@ -1,25 +1,176 @@
 version: 2
 
 models:
+  
   - name: stg_sales
+    tests:
+    - dbt_utils.unique_combination_of_columns: 
+        arguments:
+          combination_of_columns:
+            - movie_id
+            - transaction_month
+            - location_id
+    description: "Union of all NJ theater ticket sales with standardized schema"
+    columns:
+      - name: movie_id
+        data_type: varchar
+        description: "unique Movie identifier"
+        tests:
+          - not_null
+
+      - name: transaction_month
+        data_type: date
+        description: "Month of the ticket sales"
+        tests:
+          - not_null
+
+      - name: location_id
+        data_type: varchar
+        description: "Theatre location id"
+        tests:
+          - not_null
+
+      - name: total_tickets
+        data_type: number
+        description: "Amount od tickets sold"
+
+      - name: total_revenue
+        data_type: number
+        description: "Total revenuw generated"
+
+  - name: stg_invoices
+    description: "Cleaned staging table for studio invoices, providing rental costs and invoice values per movie per month per location"
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns:
+            - invoice_id
+            - release_date
+    columns:
+      - name: movie_id
+        data_type: varchar
+        description: "Unique Movie identifier"
+        tests:
+          - not_null
+
+      - name: invoice_id
+        data_type: varchar
+        description: "Invoice id"
+        tests:
+          - not_null
+          
+
+      - name: month
+        data_type: date
+        description: "Invoice month"
+        tests:
+          - not_null
+
+      - name: location_id
+        data_type: varchar
+        description: "Theater location identifier (NJ_001, NJ_002, NJ_003)"
+        tests:
+          - not_null
+
+      - name: studio
+        data_type: varchar
+        description: "Production studio"
+
+      - name: release_date
+        data_type: date
+        description: "Official release date of the movie"
+
+      - name: weekly_price
+        data_type: number
+        description: "Weekly rental price for the movie"
+
+      - name: total_invoice_sum
+        data_type: number
+        description: "Total invoice value for the month"
+
+  - name: stg_movie_details
     description: ""
     columns:
       - name: movie_id
         data_type: varchar
-        description: ""
+        description: "Unique identifier for each movie"
+        tests:
+          - unique
+          - not_null
 
-      - name: transaction_month
-        data_type: date
-        description: ""
-
-      - name: location_id
+      - name: movie_title
         data_type: varchar
-        description: ""
+        description: "Title of the movie"
+        tests:
+          - not_null
 
-      - name: total_tickets
-        data_type: number
-        description: ""
+      - name: genre
+        data_type: varchar
+        description: "Genre classification of the movie"
 
-      - name: total_revenue
+      - name: studio
+        data_type: varchar
+        description: "Production studio"
+
+      - name: rating
+        data_type: varchar
+        description: "Movie rating"
+
+      - name: minutes
         data_type: number
-        description: ""
+        description: "Movie duration"
+
+  - name: monthly_revenue
+    description: ""
+    columns:
+      - name: movie_id
+        data_type: varchar
+        description: "Movie Unique id"
+        tests:
+          - not_null
+
+      - name: movie_title
+        data_type: varchar
+        description: "Title of the movie"
+
+      - name: genre
+        data_type: varchar
+        description: "Genre classification of the movie"
+
+      - name: studio
+        data_type: varchar
+        description: "Production studio"
+
+      - name: month
+        data_type: date
+        description: "Month of the performance metrics"
+
+      - name: location
+        data_type: varchar
+        description: "Theater location identifier"
+        tests:
+          - not_null
+
+      - name: rental_cost
+        data_type: number
+        description: "Monthly rental cost of the movie"
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: tickets_sold
+        data_type: number
+        description: "Total tickets sold for the movie at the location during the month"
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: revenue
+        data_type: number
+        description: "Total ticket revenue for the movie at the location during the month"
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
