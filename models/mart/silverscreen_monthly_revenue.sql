@@ -4,7 +4,7 @@ select
     m.genre, 
     i.studio,
     i.month,
-    i.location_id,
+    i.location_id as loaction,
     i.total_invoice_sum as rental_cost,
     s.total_tickets as tickets_sold,
     s.total_revenue as revenue 
